@@ -36,113 +36,113 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
     });
-
-
     /* =========================================
-       CONTACT FORM
-    ========================================= */
+   CONTACT FORM
+========================================= */
 
-    const contactForm = document.getElementById("contactForm");
+const contactForm = document.getElementById("contactForm");
 
-    if (contactForm) {
+if (contactForm) {
 
-        contactForm.addEventListener("submit", function (event) {
+    contactForm.addEventListener("submit", async function (event) {
 
-            event.preventDefault();
+        event.preventDefault();
 
-            const name = document.getElementById("name").value.trim();
-            const email = document.getElementById("email").value.trim();
-            const subject = document.getElementById("subject").value.trim();
-            const message = document.getElementById("message").value.trim();
+        const formData = new FormData(contactForm);
 
+        try {
 
-            if (!name || !email || !subject || !message) {
-
-                alert("Please fill in all fields.");
-
-                return;
-            }
-
-
-            alert(
-                "Thank you, " +
-                name +
-                "! Your message has been prepared."
-            );
-
-
-            /* Reset form */
-
-            contactForm.reset();
-
-        });
-
-    }
-
-
-    /* =========================================
-       MOBILE NAVBAR
-    ========================================= */
-
-    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
-
-    const navbarCollapse = document.querySelector(".navbar-collapse");
-
-    navLinks.forEach(function (link) {
-
-        link.addEventListener("click", function () {
-
-            if (
-                navbarCollapse &&
-                navbarCollapse.classList.contains("show")
-            ) {
-
-                const bsCollapse =
-                    bootstrap.Collapse.getInstance(navbarCollapse);
-
-                if (bsCollapse) {
-                    bsCollapse.hide();
+            const response = await fetch(contactForm.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "Accept": "application/json"
                 }
+            });
+
+            if (response.ok) {
+
+                alert("Thank you! Your message has been sent successfully.");
+
+                contactForm.reset();
+
+            } else {
+
+                alert("Something went wrong. Please try again.");
 
             }
 
-        });
+        } catch (error) {
+
+            alert("Something went wrong. Please try again.");
+
+        }
 
     });
 
+}
 
-    /* =========================================
-       ACTIVE NAVIGATION LINK
-    ========================================= */
 
-    const sections = document.querySelectorAll("section[id]");
+ /* =========================================
+   MOBILE NAVBAR
+========================================= */
 
-    window.addEventListener("scroll", function () {
+const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
 
-        let currentSection = "";
+const navbarCollapse = document.querySelector(".navbar-collapse");
 
-        sections.forEach(function (section) {
+navLinks.forEach(function (link) {
 
-            const sectionTop = section.offsetTop - 100;
+    link.addEventListener("click", function () {
 
-            if (window.scrollY >= sectionTop) {
-                currentSection = section.getAttribute("id");
+        if (
+            navbarCollapse &&
+            navbarCollapse.classList.contains("show")
+        ) {
+
+            const bsCollapse =
+                bootstrap.Collapse.getInstance(navbarCollapse);
+
+            if (bsCollapse) {
+                bsCollapse.hide();
             }
 
-        });
+        }
+
+    });
+
+});
 
 
-        navLinks.forEach(function (link) {
+/* =========================================
+   ACTIVE NAVIGATION LINK
+========================================= */
 
-            link.classList.remove("active");
+const sections = document.querySelectorAll("section[id]");
 
-            const href = link.getAttribute("href");
+window.addEventListener("scroll", function () {
 
-            if (href === "#" + currentSection) {
-                link.classList.add("active");
-            }
+    let currentSection = "";
 
-        });
+    sections.forEach(function (section) {
+
+        const sectionTop = section.offsetTop - 100;
+
+        if (window.scrollY >= sectionTop) {
+            currentSection = section.getAttribute("id");
+        }
+
+    });
+
+    navLinks.forEach(function (link) {
+
+        link.classList.remove("active");
+
+        const href = link.getAttribute("href");
+
+        if (href === "#" + currentSection) {
+            link.classList.add("active");
+        }
 
     });
 
